@@ -8,40 +8,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-      <script src="javascript.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+     
+    
     <title>Teacher-O-Matic</title>
-
-
-    <template class="start_words">
-        <h1>Welcome to Teacher-O-Matic</h1>
-        <p>Enter your Gtihub username in the header field</p>
-    </template>
-
-
-
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper">
-          <form>
-            <div class="input-field">
-              <input id="search" type="search" required>
-              <label class="label-icon" for="search"><i class="material-icons">account_box</i></label>
-              <i class="material-icons">close</i>
-            </div>
-          </form>
-        </div>
-      </nav>
 
-      <main>
-      </main>
+<nav>
+  <div class="nav-wrapper">
+      <form id="input">
+          <div class="input-field">
+              <input id="search" type="search" placeholder="Git-user">
+              <label class="label-icon" for="search"><i class="fab fa-github"></i></label>
+              <i class="material-icons">close</i>
+          </div>
+      </form>
+      <span id="showUserRepos" title="My repos"><i class="fas fa-user-circle"></i></span>
+      <span id="showComments" title="Show comments"><i  class="fas fa-comment"></i></span>
+  </div>
+</nav>
+<span id="welcome" class="container">
+  <h1>Welcome to Teacher-O-Matic!</h1>
+  <h5>Enter your github name in the header field</h5>
+</span>
+<section class="container content">
+  <section class="row" id="grid"></section>
+  <section class="row" id="repos"></section>
+</section>
     
 </body>
-<script>
-
-window.onload = function() {
-        index()
-    }
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="javascript.js"></script>
 </html>
