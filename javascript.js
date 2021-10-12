@@ -14,29 +14,29 @@ function api() {
     }
 
     async function users() {
-        const getrequest = await fetch(`${url}/users/${user}`, token);
-        const fetched = await getrequest.json();
+        let getrequest = await fetch(`${url}/users/${user}`, token);
+        let fetched = await getrequest.json();
         console.log(fetched);
         return fetched;
     }
 
     async function repositories() {
-        const getrequest = await fetch(`${url}/users/${user}/repos`, token);
-        const fetched = await getrequest.json();
+        let getrequest = await fetch(`${url}/users/${user}/repos`, token);
+        let fetched = await getrequest.json();
         console.log(fetched);
         return fetched;
     }
 
     async function repository() {
-        const getrequest = await fetch(`${url}/repositories/${id}`, token);
-        const fetched = await getrequest.json();
+        let getrequest = await fetch(`${url}/repositories/${id}`, token);
+        let fetched = await getrequest.json();
         console.log(fetched);
         return fetched;
     }
 
     async function repos_path() {
-        const getrequest = await fetch(`${url}/repositories/${id}/contents`, token);
-        const fetched = await getrequest.json();
+        let getrequest = await fetch(`${url}/repositories/${id}/contents`, token);
+        let fetched = await getrequest.json();
         console.log(fetched);
         return fetched;
     }
