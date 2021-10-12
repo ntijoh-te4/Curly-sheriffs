@@ -1,5 +1,3 @@
-
-<<<<<<< HEAD
 function search (){
     // get GET /orgs/ntijoh-te4/repos
 }
@@ -23,25 +21,3 @@ get_rep();
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function index(){
-    const main = document.querySelector('main');
-    const template = document.querySelector('.start_words');
-    const clone = template.content.cloneNode(true);
-
-    main.appendChild(clone)
-}
