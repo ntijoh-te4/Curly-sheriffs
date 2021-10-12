@@ -5,32 +5,7 @@
 const url = "https://api.github.com";
 const user = "ntijoh-axel-ostan";
 const token = { method: 'GET', headers: { 'Authorization': 'token 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' } };
-
-
-// class api {
-//     static async user_info() {
-//         const getrequest = await fetch(`${url}/user`);
-//         const fetched = await getrequest.json();
-//         console.log(fetched);
-//         return fetched;
-//     }
-
-//     static async users(){
-//         const getrequest = await fetch(`${url}/user/${user}`);
-//         const fetched = await getrequest.json();
-//         console.log(fetched);
-//         return fetched;
-        
-//     }
-    
-//     static async repositories(){
-//         const getrequest = await fetch(`${url}/user/${user}/repos`);
-//         const fetched = await getrequest.json();
-//         console.log(fetched);
-//         return fetched;
-//     }
-    
-// }
+const id = "409177162";
 
 function api() {
     
@@ -55,9 +30,45 @@ function api() {
         return fetched;
     }
 
+    async function repository() {
+        const getrequest = await fetch(`${url}/repositories/${id}`, token);
+        const fetched = await getrequest.json();
+        const result = await esponse.json()
+        console.log(fetched);
+
+        result.items.forEach(i=>{
+            const anchor = document.getElementById("a")
+            anchor.href = i.html_url;
+            anchor.textContent = i.full_name;
+            divResult.appendChild(document.createTextNode(anchor))
+            divResult.appendChild(document.createElement("br"))
+        })
+        return fetched;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    }
+
+
+
     user_info();
     users();
     repositories();
+    repository();
 }
 api();
 
@@ -76,3 +87,11 @@ api();
 //         divResult.appendChild(document.createElement("br"))
 //     })
 // }
+
+
+// const section = document.querySelector('.container content');
+// const template = document.querySelector('#repo');
+// const clone = template.content.cloneNode(true);
+// section.appendChild(clone)
+
+
