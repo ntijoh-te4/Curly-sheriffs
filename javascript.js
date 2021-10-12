@@ -49,6 +49,7 @@ function api() {
 }
 api();
 
+// Detta kan användas osäkert dock
 // const btnRepos = document.getElementById("search")
 // const divResult = document.getElementById("divResult")
 
