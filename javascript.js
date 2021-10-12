@@ -1,17 +1,14 @@
-// function search (){
-//     // get GET /orgs/ntijoh-te4/repos
-// }
-
 const url = "https://api.github.com";
+
 const user = "ntijoh-axel-ostan";
-const token = { method: 'GET', headers: { 'Authorization': 'token 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' } };
+// const user = document.querySelector('input').value;
+const token = { method: 'GET', headers: { 'Authorization': 'token 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' } };
 const id = "409177162";
 
 function api() {
-    
     async function user_info(){
-        const getrequest = await fetch(`${url}/user`, token);
-        const fetched = await getrequest.json();
+        let getrequest = await fetch(`${url}/user`, token);
+        let fetched = await getrequest.json();
         console.log(fetched);
         return fetched;
     }
@@ -33,46 +30,26 @@ function api() {
     async function repository() {
         const getrequest = await fetch(`${url}/repositories/${id}`, token);
         const fetched = await getrequest.json();
-        const result = await esponse.json()
         console.log(fetched);
-
-        result.items.forEach(i=>{
-            const anchor = document.getElementById("a")
-            anchor.href = i.html_url;
-            anchor.textContent = i.full_name;
-            divResult.appendChild(document.createTextNode(anchor))
-            divResult.appendChild(document.createElement("br"))
-        })
-        return fetched;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
+        return fetched;        
     }
 
-
+    async function repos_path() {
+        const getrequest = await fetch(`${url}/repositories/${id}/contents`, token);
+        const fetched = await getrequest.json();
+        console.log(fetched);
+        return fetched;
+    }
 
     user_info();
     users();
     repositories();
     repository();
+    repos_path();
 }
 api();
 
-// const btnRepos = document.getElementById("searchRepos")
+// const btnRepos = document.getElementById("search")
 // const divResult = document.getElementById("divResult")
 
 // btnRepos.addEventListener("click", getRepos)
