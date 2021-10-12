@@ -1,5 +1,4 @@
 
-<<<<<<< HEAD
 function search (){
     // get GET /orgs/ntijoh-te4/repos
 }
