@@ -1,7 +1,4 @@
-const url = "https://api.github.com";
-const user = "ntijoh-axel-ostan";
-const id = "409177162";
-
+// hämta token.key filen
 async function readFile(file) {
     return await fetch(file)
         .then(response => response.text())
@@ -12,8 +9,17 @@ async function getToken() {
     return response;
 }
 
+// constanter 
+const url = "https://api.github.com";
+const user = "ntijoh-axel-ostan";
+const id = "409177162";
 
 
+
+// eventlistener på input
+document.querySelector('#search').addEventListener("focus", api);
+
+//api funktionen på eventlistener
 function api() {
 
     async function user_info(){
@@ -51,35 +57,13 @@ function api() {
          return fetched;
      }
 
-    user_info();
+    //kör dom olika funktionerna
+     user_info();
      users();
      repositories();
      repository();
      repos_path();
 }
-api();
 
-// Detta kan användas osäkert dock
-// const btnRepos = document.getElementById("search")
-// const divResult = document.getElementById("divResult")
-
-// btnRepos.addEventListener("click", getRepos)
-// async function getRepos() {
-//     const url = "https://api.github.com/users/ntijoh-axel-ostan?q=stars:>0"
-//     const getrequest = await fetch(`${url}/users/${user}/repos`, token);
-//     const result = await response.json()
-
-//     result.items.forEach(i=>{
-//         const anchor = document.getElementById
-//         divResult.appendChild(document.createTextNode(i.full_name))
-//         divResult.appendChild(document.createElement("br"))
-//     })
-// }
-
-
-// const section = document.querySelector('.container content');
-// const template = document.querySelector('#repo');
-// const clone = template.content.cloneNode(true);
-// section.appendChild(clone)
 
 
