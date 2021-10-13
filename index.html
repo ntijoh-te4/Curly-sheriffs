@@ -8,10 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-    <title>Teacher-O-Matic</title>
+      <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/atom-one-dark.min.css">
+     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+     <script>hljs.highlightAll();</script>
+     <title>Teacher-O-Matic</title>
 </head>
 <body>
-
+    
   <template id="repo">
     <div class="card col s6 repo" data-id="">
         <div class="card-content">
@@ -26,7 +30,7 @@
   <template id="fork">
     <div class="card col s6 fork" data-id="">
         <h4 class="fork-title"></h4>
-        <pre class="fork-code"></pre>
+        <pre class="fork-code"><code></code></pre>
         <a href="">Show on Github</a>
         <div class="unit-tests"></div>
         <div class="fork-form">
@@ -82,11 +86,6 @@
   <section class="row" id="grid"></section>
   <section class="row" id="repos"></section>
 </section>
-
-
-
-
-
 
 
 </body>
