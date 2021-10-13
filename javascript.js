@@ -4,6 +4,7 @@ async function readFile(file) {
         .then(response => response.text())
         .then(text => text)
 }
+// hämtar git keyn från token.key
 async function getToken() {
     response = await readFile('../token.key');
     return response;
@@ -24,24 +25,37 @@ function api() {
     let searchInput = document.querySelector("#search").value
     console.log(searchInput)
 
-    async function user_info(){
-        let getrequest = await fetch(`${url}/user`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
-        let fetched = await getrequest.json();
-        console.log(fetched);
-        return fetched;
-    }
+
      // tar in en användare
-     async function users() {
-         let getrequest = await fetch(`${url}/users/${searchInput}`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
-         let fetched = await getrequest.json();
-         console.log(fetched);
-         console.log(searchInput);
-         return fetched;
-     }   
-     // tar in repositories från nämnd användare
+     // async function users() {
+     //    let getrequest = await fetch(`${url}/users/${searchInput}`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
+      //   let fetched = await getrequest.json();
+    //      let info = JSON.stringify(fetched.login);
+    //      console.log(info);
+       //  console.log(fetched);
+       //  console.log(searchInput);
+      //   return fetched;
+   //  } 
+
+
+    // hämtar username info
+    //  async function users() {
+    //      let getrequest = await fetch(`${url}/users/${user}`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
+    //      let fetched = await getrequest.json();
+    //      let info = JSON.stringify(fetched.login);
+    //      console.log(info);
+    //      return fetched;
+    //  }   
+
      async function repositories() {
          let getrequest = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
          let fetched = await getrequest.json();
+         for (let i = 0; i < fetched.length; i++) {
+            let name = JSON.stringify(fetched[i].name);
+            let forks = JSON.stringify(fetched[i].forks);
+            console.log(name);
+            console.log(forks);
+         }
          console.log(fetched);
          return fetched;
      }
@@ -57,13 +71,11 @@ function api() {
      async function repos_path() {
          let getrequest = await fetch(`${url}/repositories/${id}/contents`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
          let fetched = await getrequest.json();
-         console.log(fetched);
          return fetched;
      }
 
     //kör dom olika funktionerna
-     user_info();
-     users();
+    // users();
      repositories();
      repository();
      repos_path();
