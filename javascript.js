@@ -10,6 +10,7 @@ function api() {
         let getrequest = await fetch(`${url}/user`, token);
         let fetched = await getrequest.json();
         console.log(fetched);
+        console.log(token);
         return fetched;
     }
 
@@ -31,7 +32,7 @@ function api() {
         let getrequest = await fetch(`${url}/repositories/${id}`, token);
         let fetched = await getrequest.json();
         console.log(fetched);
-        return fetched;
+        return fetched;        
     }
 
     async function repos_path() {
@@ -49,11 +50,27 @@ function api() {
 }
 api();
 
+// Detta kan användas osäkert dock
+// const btnRepos = document.getElementById("search")
+// const divResult = document.getElementById("divResult")
 
+// btnRepos.addEventListener("click", getRepos)
+// async function getRepos() {
+//     const url = "https://api.github.com/users/ntijoh-axel-ostan?q=stars:>0"
+//     const getrequest = await fetch(`${url}/users/${user}/repos`, token);
+//     const result = await response.json()
+
+//     result.items.forEach(i=>{
+//         const anchor = document.getElementById
+//         divResult.appendChild(document.createTextNode(i.full_name))
+//         divResult.appendChild(document.createElement("br"))
+//     })
+// }
 
 
 // const section = document.querySelector('.container content');
 // const template = document.querySelector('#repo');
 // const clone = template.content.cloneNode(true);
 // section.appendChild(clone)
+
 
