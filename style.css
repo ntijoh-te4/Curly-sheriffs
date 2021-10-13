@@ -43,6 +43,11 @@ button:focus{
 
 #forks{
     margin: auto;
-    
+
 }
 
+.fork-code{
+    background-color: black;
+    color: white;
+    margin-bottom: 1rem;
+}

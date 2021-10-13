@@ -1,8 +1,9 @@
 const url = "https://api.github.com";
 
 const user = "ntijoh-axel-ostan";
+
+const token = { method: 'GET', headers: { 'Authorization': 'token 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' } };
 // const user = document.querySelector('input').value;
-const token = { method: 'GET', headers: { 'Authorization': 'token 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' } };
 const id = "409177162";
 
 function api() {
