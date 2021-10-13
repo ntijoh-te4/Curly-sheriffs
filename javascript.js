@@ -4,7 +4,7 @@ function search (){
 
 const url = "https://api.github.com";
 const user = "ntijoh-axel-ostan";
-const token = { method: 'GET', headers: { 'Authorization': 'token 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' } };
+const token = { method: 'GET', headers: { 'Authorization': 'token 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' } };
 const id = "409177162";
 // class api {
 //     static async user_info() {
