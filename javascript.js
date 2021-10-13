@@ -1,52 +1,61 @@
 const url = "https://api.github.com";
-
 const user = "ntijoh-axel-ostan";
-
-const token = { method: 'GET', headers: { 'Authorization': 'token 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' } };
-// const user = document.querySelector('input').value;
 const id = "409177162";
 
+async function readFile(file) {
+    return await fetch(file)
+        .then(response => response.text())
+        .then(text => text)
+}
+async function getToken() {
+    response = await readFile('../token.key');
+    return response;
+}
+
+
+
 function api() {
+
     async function user_info(){
-        let getrequest = await fetch(`${url}/user`, token);
+        let getrequest = await fetch(`${url}/user`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
         let fetched = await getrequest.json();
         console.log(fetched);
         return fetched;
     }
 
-    async function users() {
-        let getrequest = await fetch(`${url}/users/${user}`, token);
-        let fetched = await getrequest.json();
-        console.log(fetched);
-        return fetched;
-    }
+     async function users() {
+         let getrequest = await fetch(`${url}/users/${user}`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
+         let fetched = await getrequest.json();
+         console.log(fetched);
+         return fetched;
+     }   
 
-    async function repositories() {
-        let getrequest = await fetch(`${url}/users/${user}/repos`, token);
-        let fetched = await getrequest.json();
-        console.log(fetched);
-        return fetched;
-    }
+     async function repositories() {
+         let getrequest = await fetch(`${url}/users/${user}/repos`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
+         let fetched = await getrequest.json();
+         console.log(fetched);
+         return fetched;
+     }
 
-    async function repository() {
-        let getrequest = await fetch(`${url}/repositories/${id}`, token);
-        let fetched = await getrequest.json();
-        console.log(fetched);
-        return fetched;        
-    }
+     async function repository() {
+         let getrequest = await fetch(`${url}/repositories/${id}`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
+         let fetched = await getrequest.json();
+         console.log(fetched);
+         return fetched;        
+     }
 
-    async function repos_path() {
-        let getrequest = await fetch(`${url}/repositories/${id}/contents`, token);
-        let fetched = await getrequest.json();
-        console.log(fetched);
-        return fetched;
-    }
+     async function repos_path() {
+         let getrequest = await fetch(`${url}/repositories/${id}/contents`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
+         let fetched = await getrequest.json();
+         console.log(fetched);
+         return fetched;
+     }
 
     user_info();
-    users();
-    repositories();
-    repository();
-    repos_path();
+     users();
+     repositories();
+     repository();
+     repos_path();
 }
 api();
 
