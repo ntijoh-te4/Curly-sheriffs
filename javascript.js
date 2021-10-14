@@ -37,8 +37,6 @@ function api(e) {
                const clone = tmpl.content.cloneNode(true);
                const _name = document.createTextNode(repo_name);
 
-
-
                clone.querySelector('#showForks').addEventListener("click", files);
                clone.querySelector('#showForks').id = id;
 
@@ -48,8 +46,6 @@ function api(e) {
                clone.querySelector("#forks").appendChild(addForks);
                container.appendChild(clone);
             }
-        
-
         return repos_fetched;
     }
      repositories();
