@@ -29,7 +29,9 @@ function api(e) {
 
            for (let i = 0; i < repos_fetched.length; i++) {
                let repo_name = JSON.stringify(repos_fetched[i].name);
+               repo_name = repo_name.replaceAll('"', '')
                let repo_forks = JSON.stringify(repos_fetched[i].forks);
+
                let id = JSON.stringify(repos_fetched[i].id);
 
                const container = document.querySelector(".row");
@@ -48,7 +50,6 @@ function api(e) {
                clone.querySelector("#forks").appendChild(addForks);
                container.appendChild(clone);
             }
-        
 
         return repos_fetched;
     }
