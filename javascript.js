@@ -100,11 +100,10 @@ function api(e) {
 
            for (let i = 0; i < repos_fetched.length; i++) {
                let repo_name = JSON.stringify(repos_fetched[i].name);
+               repo_name = repo_name.replaceAll('"', '')
                let repo_forks = JSON.stringify(repos_fetched[i].forks);
             //    let id = JSON.stringify(repos_fetched[i].id);
-               console.log(repo_name);
                
-
                const container = document.querySelector(".row");
                const tmpl = document.querySelector("#repo");
                const clone = tmpl.content.cloneNode(true);
@@ -114,9 +113,6 @@ function api(e) {
                clone.querySelector("#forks").appendChild(addForks);
                container.appendChild(clone);
             }
-            console.log(repos_fetched);
-        
-
         return repos_fetched;
     }
     //kör dom olika funktionerna
