@@ -15,11 +15,14 @@ const url = "https://api.github.com";
 
 
 // eventlistener på input
-document.querySelector('#search').addEventListener("input", api);
-document.querySelector('#fork').addEventListener("click", files);
+
+
+document.querySelector('form#input').addEventListener("submit", api);
 
 //api funktionen på eventlistener
-function api() {
+function api(e) {
+    e.preventDefault();
+
     let searchInput = document.querySelector("#search").value
     console.log(searchInput)
 
@@ -80,27 +83,43 @@ function api() {
 
 
      async function repositories() {
+
         let repos = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
         let repos_fetched = await repos.json();
 
-        const container = document.querySelector(".container content");
-        const tmpl = document.querySelector("#repo");
-        const card = document.querySelector(".card-content");
-        const card_name = document.querySelector("#name");
-        const card_href = document.querySelector("a");
-        const card_forks = document.querySelector("#forks");
 
+        //let path_fetched = await getrequest.json();
+        
+    
+        //const card = document.querySelector(".card-content");
+        // let card_name = document.querySelector("#name");
+        // const card_href = document.querySelector("a");
+        // const card_forks = document.querySelector("#forks");
+
+        // let main = document.querySelector("main");
+        // main.innerHTML = "";
 
            for (let i = 0; i < repos_fetched.length; i++) {
-               let name = JSON.stringify(repos_fetched[i].name);
-               let forks = JSON.stringify(repos_fetched[i].forks);
+               let repo_name = JSON.stringify(repos_fetched[i].name);
+            //    let forks = JSON.stringify(repos_fetched[i].forks);
+            
+               console.log(repo_name);
+               
+               
+               const container = document.querySelector(".row");
+                const tmpl = document.querySelector("#repo");
+               const clone = tmpl.content.cloneNode(true);
                let id = JSON.stringify(repos_fetched[i].id);
-
-               console.log(name);
-               console.log(forks);
                console.log(id);
-
+ 
+               const _name = document.createTextNode(repo_name);
+               clone.querySelector("#name").appendChild(_name);
+               clone.querySelector('#showForks').addEventListener("click", files);
+               clone.querySelector('#showForks').id = id;
+               
+               container.appendChild(clone);
             }
+            console.log(repos_fetched);
         
 
         return repos_fetched;
@@ -113,11 +132,15 @@ function api() {
 }
 
 // ny test constant
-const id = "417086855";
-async function files(){
-   
 
-    let path = await fetch(`${url}/repositories/${id}/contents`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
+
+async function files(event){
+    let forkid = event.target.id;
+    
+    let main = document.querySelector("main");
+    main.innerHTML = "";
+
+    let path = await fetch(`${url}/repositories/${forkid}/contents`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
     let path_fetched = await path.json();
     console.log(path_fetched);
     let file = JSON.stringify(path_fetched[1].download_url);
@@ -125,7 +148,7 @@ async function files(){
  
     console.log(file);
 
-    let main = document.querySelector("main");
+    
     let filecardtemplate = document.querySelector("#fork");
     const fork_clone = filecardtemplate.content.cloneNode(true);
 
@@ -138,5 +161,4 @@ async function files(){
 
 }
 
-files();
 
