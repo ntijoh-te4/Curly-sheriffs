@@ -18,10 +18,12 @@ const id = "409177162";
 
 
 // eventlistener på input
-document.querySelector('#search').addEventListener("input", api);
+document.querySelector('form#input').addEventListener("submit", api);
 
 //api funktionen på eventlistener
-function api() {
+function api(e) {
+    e.preventDefault();
+
     let searchInput = document.querySelector("#search").value
     console.log(searchInput)
 
@@ -81,31 +83,39 @@ function api() {
 
 
      async function repositories() {
+
         let repos = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
         let repos_fetched = await repos.json();
         let path = await fetch(`${url}/repositories/${id}/contents`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
-        let path_fetched = await getrequest.json();
+        //let path_fetched = await getrequest.json();
         
-        const container = document.querySelector(".container content");
-        const tmpl = document.querySelector("#repo");
-        const card = document.querySelector(".card-content");
-        const card_name = document.querySelector("#name");
-        const card_href = document.querySelector("a");
-        const card_forks = document.querySelector("#forks");
+    
+        //const card = document.querySelector(".card-content");
+        // let card_name = document.querySelector("#name");
+        // const card_href = document.querySelector("a");
+        // const card_forks = document.querySelector("#forks");
 
+        // let main = document.querySelector("main");
+        // main.innerHTML = "";
 
            for (let i = 0; i < repos_fetched.length; i++) {
-               let name = JSON.stringify(repos_fetched[i].name);
-               let forks = JSON.stringify(repos_fetched[i].forks);
-               let id = JSON.stringify(repos_fetched[i].id);
-               console.log(name);
-               console.log(forks);
+               let repo_name = JSON.stringify(repos_fetched[i].name);
+            //    let forks = JSON.stringify(repos_fetched[i].forks);
+            //    let id = JSON.stringify(repos_fetched[i].id);
+               console.log(repo_name);
+               
 
+               const container = document.querySelector(".row");
+                const tmpl = document.querySelector("#repo");
+               const clone = tmpl.content.cloneNode(true);
+               const _name = document.createTextNode(repo_name);
+               clone.querySelector("#name").appendChild(_name);
+               container.appendChild(clone);
             }
-            console.log(fetched);
+            console.log(repos_fetched);
         
 
-        return fetched;
+        return repos_fetched;
     }
     //kör dom olika funktionerna
     // users();
