@@ -52,5 +52,16 @@ button:focus{
     margin-bottom: 1rem;
 }
 
+.row{
+    margin: auto;
+}
+.row .col.s6{
+    height: 120px;
+    margin: 10px;
+}
+
+a{
+    width: 150px;
+}
 
 
