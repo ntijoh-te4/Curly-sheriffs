@@ -112,9 +112,8 @@ function api(e) {
 
                let id = JSON.stringify(repos_fetched[i].id);
                console.log(id);
- 
-               const _name = document.createTextNode(repo_name);
-               clone.querySelector("#name").appendChild(_name);
+
+            
                clone.querySelector('#showForks').addEventListener("click", files);
                clone.querySelector('#showForks').id = id;
             
