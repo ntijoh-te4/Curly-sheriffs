@@ -100,16 +100,18 @@ function api(e) {
 
            for (let i = 0; i < repos_fetched.length; i++) {
                let repo_name = JSON.stringify(repos_fetched[i].name);
-            //    let forks = JSON.stringify(repos_fetched[i].forks);
+               let repo_forks = JSON.stringify(repos_fetched[i].forks);
             //    let id = JSON.stringify(repos_fetched[i].id);
                console.log(repo_name);
                
 
                const container = document.querySelector(".row");
-                const tmpl = document.querySelector("#repo");
+               const tmpl = document.querySelector("#repo");
                const clone = tmpl.content.cloneNode(true);
-               const _name = document.createTextNode(repo_name);
-               clone.querySelector("#name").appendChild(_name);
+               const addName = document.createTextNode(repo_name);
+               const addForks = document.createTextNode(repo_forks);
+               clone.querySelector("#name").appendChild(addName);
+               clone.querySelector("#forks").appendChild(addForks);
                container.appendChild(clone);
             }
             console.log(repos_fetched);
