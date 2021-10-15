@@ -24,11 +24,11 @@ function api(e) {
     let searchInput = document.querySelector("#search").value
 
      async function repositories() {
+
         let repos = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
         let repos_fetched = await repos.json();
 
        
-
            for (let i = 0; i < repos_fetched.length; i++) {
                let id = JSON.stringify(repos_fetched[i].id);
                let htmlpath = await fetch(`${url}/repositories/${id}`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
@@ -60,19 +60,25 @@ function api(e) {
                container.appendChild(clone);
             }
         return repos_fetched;
+            
     }
-     repositories();
+    repositories();
 
 }
 
-
+//Läser in forks
 async function files(event){
-    
-    let forkid = event.target.id;
+    const repoId = event.target.id;
+
+    //Hämta antalet forks
+    const target = event.target;
+    const parent = target.parentElement;
+    const forks = parent.querySelector("#forks").innerHTML;
+
     let main = document.querySelector("main");
     main.innerHTML = "";
 
-    let path = await fetch(`${url}/repositories/${forkid}/contents`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
+    let path = await fetch(`${url}/repositories/${repoId}/contents`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
     let path_fetched = await path.json();
     console.log(path_fetched);
     let file = JSON.stringify(path_fetched[1].download_url);
@@ -80,16 +86,18 @@ async function files(event){
  
     console.log(file);
 
-    
     let filecardtemplate = document.querySelector("#fork");
-    const fork_clone = filecardtemplate.content.cloneNode(true);
+    for (let i = 0; i < forks; i++) {
+        const fork_clone = filecardtemplate.content.cloneNode(true);
 
-    fork_clone.querySelector(".fork-title").textContent = "Api-test";
-    fork_clone.querySelector("code").textContent = file;
-    fork_clone.querySelector("a").href = html_link;
-    fork_clone.querySelector(".unit-tests").textContent= "40p";
+        fork_clone.querySelector(".fork-title").textContent = "Api-test";
+        fork_clone.querySelector("code").textContent = file;
+        fork_clone.querySelector("a").href = html_link;
+        fork_clone.querySelector(".unit-tests").textContent= "40p";
     
-    main.appendChild(fork_clone);
+        main.appendChild(fork_clone);
+    }
+    
 
 }
 
