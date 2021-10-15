@@ -12,7 +12,6 @@ async function getToken() {
 // constanter
 const url = 'https://api.github.com';
 // eventlistener på input
-
 // Läser in forks
 async function files(event) {
   const repoId = event.target.id;
@@ -27,7 +26,6 @@ async function files(event) {
   console.log(pathFetched);
   const htmlFile = JSON.stringify(pathFetched[0].download_url);
   const htmlLink = pathFetched[0].html_url;
-
   console.log(htmlFile);
   const filecardtemplate = document.querySelector('#fork');
   // eslint-disable-next-line eqeqeq
@@ -47,36 +45,24 @@ async function files(event) {
       const code = JSON.parse(atob(json.content.replace(/(\r\n|\n|\r)/gm, '')));
       console.log(code);
       console.log(code.filePath);
-
       const codePath = await fetch(`${url}/repos/ntijoh/smallest_of_two/contents/${code.filePath}?ref=master`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
       const codeJson = await codePath.json();
       console.log(codeJson);
     }
-
     // hämtar ut dens content och sedan decypta den så vi får ut information
-
     //  sedan tar den filepath så vi kan hämta den specilea JS coden som vi behöver
-
-    const codePath = await fetch(`${url}/repos/TE4-Mattis-Abrahamsson/smallest_of_two/contents/${code.filePath}?ref=master`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
-    const codeJson = await codePath.json();
-    console.log(codeJson);
-    let contentCode = atob(codeJson.content.replace(/(\r\n|\n|\r)/gm, ''));
-    console.log(contentCode);
-    contentCode = contentCode.replaceAll('"', '');
     // hämta content av fillen och skriv in den i våran html
-
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < forks; i++) {
       const forkClone = filecardtemplate.content.cloneNode(true);
       forkClone.querySelector('.fork-title').textContent = 'Api-test';
-      forkClone.querySelector('code').textContent = contentCode;
+      forkClone.querySelector('code').textContent = htmlFile;
       forkClone.querySelector('a').href = htmlLink;
       forkClone.querySelector('.unit-tests').textContent = '40p';
       main.appendChild(forkClone);
     }
   }
 }
-
 // api funktionen på eventlistener
 function api(e) {
   e.preventDefault();
