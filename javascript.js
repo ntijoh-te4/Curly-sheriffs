@@ -24,11 +24,8 @@ async function files(event) {
   main.innerHTML = '';
   const path = await fetch(`${url}/repositories/${repoId}/contents`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
   const pathFetched = await path.json();
-  console.log(pathFetched);
   const htmlFile = JSON.stringify(pathFetched[1].download_url);
   const htmlLink = pathFetched[1].html_url;
-
-  console.log(htmlFile);
   const filecardtemplate = document.querySelector('#fork');
   // eslint-disable-next-line eqeqeq
   if (forks == 0) {
