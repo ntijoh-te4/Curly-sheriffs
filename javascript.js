@@ -12,7 +12,6 @@ async function getToken() {
 // constanter
 const url = 'https://api.github.com';
 // eventlistener på input
-
 // Läser in forks
 async function files(event) {
   const repoId = event.target.id;
@@ -24,8 +23,10 @@ async function files(event) {
   main.innerHTML = '';
   const path = await fetch(`${url}/repositories/${repoId}/contents`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
   const pathFetched = await path.json();
-  const htmlFile = JSON.stringify(pathFetched[1].download_url);
-  const htmlLink = pathFetched[1].html_url;
+  console.log(pathFetched);
+  const htmlFile = JSON.stringify(pathFetched[0].download_url);
+  const htmlLink = pathFetched[0].html_url;
+  console.log(htmlFile);
   const filecardtemplate = document.querySelector('#fork');
   // eslint-disable-next-line eqeqeq
   if (forks == 0) {
@@ -33,21 +34,23 @@ async function files(event) {
     alert('Inga forks hittade.');
   } else {
     // hämtar bara ut ifall den har .manifest.json
-    // eslint-disable-next-line no-shadow
-    const info = pathFetched.filter((htmlFile) => htmlFile.name === '.manifest.json')[0];
+    if (pathFetched.filter((file) => file.name === '.manifest.json')[0] === undefined) {
+      window.location.reload();
+      alert('Inga hittade.');
+    } else {
+      const info = pathFetched.filter((file) => file.name === '.manifest.json')[0];
+      console.log(info[url]);
+      const response = await fetch(info.url, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
+      const json = await response.json();
+      const code = JSON.parse(atob(json.content.replace(/(\r\n|\n|\r)/gm, '')));
+      console.log(code);
+      console.log(code.filePath);
+      const codePath = await fetch(`${url}/repos/ntijoh/smallest_of_two/contents/${code.filePath}?ref=master`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
+      const codeJson = await codePath.json();
+      console.log(codeJson);
+    }
     // hämtar ut dens content och sedan decypta den så vi får ut information
-    const response = await fetch(info.url, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
-    const json = await response.json();
-    const code = JSON.parse(atob(json.content.replace(/(\r\n|\n|\r)/gm, '')));
-    console.log(code);
-
-    console.log(code.filePath);
     //  sedan tar den filepath så vi kan hämta den specilea JS coden som vi behöver
-
-    const codePath = await fetch(`${url}/repos/ntijoh/smallest_of_two/contents/${code.filePath}?ref=master`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
-    const codeJson = await codePath.json();
-    console.log(codeJson);
-
     // hämta content av fillen och skriv in den i våran html
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < forks; i++) {
@@ -60,7 +63,6 @@ async function files(event) {
     }
   }
 }
-
 // api funktionen på eventlistener
 function api(e) {
   e.preventDefault();
