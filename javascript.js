@@ -57,12 +57,17 @@ async function files(event){
     let html_link = path_fetched[1].html_url;
     console.log(file);
     let filecardtemplate = document.querySelector("#fork");
-    for (let i = 0; i < forks; i++) {
-        const fork_clone = filecardtemplate.content.cloneNode(true);
-        fork_clone.querySelector(".fork-title").textContent = "Api-test";
-        fork_clone.querySelector("code").textContent = file;
-        fork_clone.querySelector("a").href = html_link;
-        fork_clone.querySelector(".unit-tests").textContent= "40p";
-        main.appendChild(fork_clone);
+    if(forks == 0){
+        window.location.reload();
+        alert("Inga forks hittade.");
+    }else{
+        for (let i = 0; i < forks; i++) {
+            const fork_clone = filecardtemplate.content.cloneNode(true);
+            fork_clone.querySelector(".fork-title").textContent = "Api-test";
+            fork_clone.querySelector("code").textContent = file;
+            fork_clone.querySelector("a").href = html_link;
+            fork_clone.querySelector(".unit-tests").textContent= "40p";
+            main.appendChild(fork_clone);
+        }
     }
 }
