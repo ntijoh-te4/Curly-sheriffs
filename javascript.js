@@ -47,16 +47,20 @@ async function files(event) {
     console.log(code.filePath);
     //  sedan tar den filepath så vi kan hämta den specilea JS coden som vi behöver
 
-    const codePath = await fetch(`${url}/repos/ntijoh/smallest_of_two/contents/${code.filePath}?ref=master`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
+    const codePath = await fetch(`${url}/repos/TE4-Mattis-Abrahamsson/smallest_of_two/contents/${code.filePath}?ref=master`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
     const codeJson = await codePath.json();
     console.log(codeJson);
+    let contentCode = atob(codeJson.content.replace(/(\r\n|\n|\r)/gm, ''));
+    console.log(contentCode);
+    contentCode = contentCode.replaceAll('"', '');
 
     // hämta content av fillen och skriv in den i våran html
+
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < forks; i++) {
       const forkClone = filecardtemplate.content.cloneNode(true);
       forkClone.querySelector('.fork-title').textContent = 'Api-test';
-      forkClone.querySelector('code').textContent = htmlFile;
+      forkClone.querySelector('code').textContent = contentCode;
       forkClone.querySelector('a').href = htmlLink;
       forkClone.querySelector('.unit-tests').textContent = '40p';
       main.appendChild(forkClone);
