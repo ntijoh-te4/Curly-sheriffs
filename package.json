@@ -1,0 +1,24 @@
+{
+  "name": "curly-sheriffs",
+  "version": "1.0.0",
+  "description": "TE4-uppgift-2",
+  "main": "javascript.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ntijoh-te4/Curly-sheriffs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ntijoh-te4/Curly-sheriffs/issues"
+  },
+  "homepage": "https://github.com/ntijoh-te4/Curly-sheriffs#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2"
+  }
+}
