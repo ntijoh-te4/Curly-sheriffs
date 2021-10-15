@@ -19,7 +19,7 @@ document.querySelector('form#input').addEventListener("submit", api);
 
 //api funktionen på eventlistener
 function api(e) {
-
+    
     e.preventDefault();
     let searchInput = document.querySelector("#search").value
 
@@ -28,7 +28,9 @@ function api(e) {
         let repos = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
         let repos_fetched = await repos.json();
 
-       
+        let test = JSON.stringify(repos_fetched);
+        console.log(repos_fetched)
+
            for (let i = 0; i < repos_fetched.length; i++) {
                let id = JSON.stringify(repos_fetched[i].id);
                let htmlpath = await fetch(`${url}/repositories/${id}`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
@@ -85,18 +87,24 @@ async function files(event){
     let html_link = path_fetched[1].html_url;
  
     console.log(file);
+  
+    let repos_fetched_name = await fetch(`${url}/repositories/${forkid}`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
+    let repos_fetched_main_name = await repos_fetched_name.json();
+    
+    repos_fetched_main_name = JSON.stringify(repos_fetched_main_name.full_name);
+    repos_fetched_main_name = repos_fetched_main_name.replaceAll('"', '')
 
+  
     let filecardtemplate = document.querySelector("#fork");
     for (let i = 0; i < forks; i++) {
         const fork_clone = filecardtemplate.content.cloneNode(true);
 
-        fork_clone.querySelector(".fork-title").textContent = "Api-test";
-        fork_clone.querySelector("code").textContent = file;
-        fork_clone.querySelector("a").href = html_link;
-        fork_clone.querySelector(".unit-tests").textContent= "40p";
-    
-        main.appendChild(fork_clone);
-    }
+
+    fork_clone.querySelector(".fork-title").textContent = repos_fetched_main_name;
+    fork_clone.querySelector("code").textContent = file;
+    fork_clone.querySelector("a").href = html_link;
+    fork_clone.querySelector(".unit-tests").textContent= "40p";
+
     
 
 }
