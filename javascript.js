@@ -1,95 +1,95 @@
 // hämta token.key filen
 async function readFile(file) {
-    return await fetch(file)
-        .then(response => response.text())
-        .then(text => text)
+  return fetch(file)
+    .then((response) => response.text())
+    .then((text) => text);
 }
 // hämtar git keyn från token.key
 async function getToken() {
-    response = await readFile('../token.key');
-    return response;
+  const response = await readFile('../token.key');
+  return response;
 }
 // constanter
-const url = "https://api.github.com";
+const url = 'https://api.github.com';
 // eventlistener på input
-document.querySelector('form#input').addEventListener("submit", api);
-//api funktionen på eventlistener
+
+// Läser in forks
+async function files(event) {
+  const repoId = event.target.id;
+  // Hämta antalet forks
+  const { target } = event;
+  const parent = target.parentElement;
+  const forks = parent.querySelector('#forks').innerHTML;
+  const main = document.querySelector('main');
+  main.innerHTML = '';
+  const path = await fetch(`${url}/repositories/${repoId}/contents`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
+  const pathFetched = await path.json();
+  console.log(pathFetched);
+  const htmlFile = JSON.stringify(pathFetched[1].download_url);
+  const htmlLink = pathFetched[1].html_url;
+
+  console.log(htmlFile);
+  const filecardtemplate = document.querySelector('#fork');
+  // eslint-disable-next-line eqeqeq
+  if (forks == 0) {
+    window.location.reload();
+    alert('Inga forks hittade.');
+  } else {
+    // hämtar bara ut ifall den har .manifest.json
+    // eslint-disable-next-line no-shadow
+    const info = pathFetched.filter((htmlFile) => htmlFile.name === '.manifest.json')[0];
+    // hämtar ut dens content och sedan decypta den så vi får ut information
+    const response = await fetch(info.url, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
+    const json = await response.json();
+    const code = JSON.parse(atob(json.content.replace(/(\r\n|\n|\r)/gm, '')));
+    console.log(code);
+
+    console.log(code.filePath);
+    //  sedan tar den filepath så vi kan hämta den specilea JS coden som vi behöver
+
+    const codePath = await fetch(`${url}/repos/ntijoh/smallest_of_two/contents/${code.filePath}?ref=master`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
+    const codeJson = await codePath.json();
+    console.log(codeJson);
+
+    // hämta content av fillen och skriv in den i våran html
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < forks; i++) {
+      const forkClone = filecardtemplate.content.cloneNode(true);
+      forkClone.querySelector('.fork-title').textContent = 'Api-test';
+      forkClone.querySelector('code').textContent = htmlFile;
+      forkClone.querySelector('a').href = htmlLink;
+      forkClone.querySelector('.unit-tests').textContent = '40p';
+      main.appendChild(forkClone);
+    }
+  }
+}
+
+// api funktionen på eventlistener
 function api(e) {
-    e.preventDefault();
-    let searchInput = document.querySelector("#search").value
-     async function repositories() {
-            let repos = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
-            let repos_fetched = await repos.json();
-           for (let i = 0; i < repos_fetched.length; i++) {
-               let repo_name = JSON.stringify(repos_fetched[i].name);
-               repo_name = repo_name.replaceAll('"', '')
-               let repo_forks = JSON.stringify(repos_fetched[i].forks);
-               let id = JSON.stringify(repos_fetched[i].id);
-               const container = document.querySelector(".row");
-               const tmpl = document.querySelector("#repo");
-               const clone = tmpl.content.cloneNode(true);
-               const _name = document.createTextNode(repo_name);
-               clone.querySelector('#showForks').addEventListener("click", files);
-               clone.querySelector('#showForks').id = id;
-               const addName = document.createTextNode(repo_name);
-               const addForks = document.createTextNode(repo_forks);
-               clone.querySelector("#name").appendChild(addName);
-               clone.querySelector("#forks").appendChild(addForks);
-               container.appendChild(clone);
-            }
-        return repos_fetched;
+  e.preventDefault();
+  const searchInput = document.querySelector('#search').value;
+  async function repositories() {
+    const repos = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
+    const reposFetched = await repos.json();
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < reposFetched.length; i++) {
+      let repoName = JSON.stringify(reposFetched[i].name);
+      repoName = repoName.replaceAll('"', '');
+      const repoForks = JSON.stringify(reposFetched[i].forks);
+      const id = JSON.stringify(reposFetched[i].id);
+      const container = document.querySelector('.row');
+      const tmpl = document.querySelector('#repo');
+      const clone = tmpl.content.cloneNode(true);
+      clone.querySelector('#showForks').addEventListener('click', files);
+      clone.querySelector('#showForks').id = id;
+      const addName = document.createTextNode(repoName);
+      const addForks = document.createTextNode(repoForks);
+      clone.querySelector('#name').appendChild(addName);
+      clone.querySelector('#forks').appendChild(addForks);
+      container.appendChild(clone);
     }
-    repositories();
+    return reposFetched;
+  }
+  repositories();
 }
-//Läser in forks
-async function files(event){
-    const repoId = event.target.id;
-    //Hämta antalet forks
-    const target = event.target;
-    const parent = target.parentElement;
-    const forks = parent.querySelector("#forks").innerHTML;
-    let main = document.querySelector("main");
-    main.innerHTML = "";
-    let path = await fetch(`${url}/repositories/${repoId}/contents`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() } });
-    let path_fetched = await path.json();
-    console.log(path_fetched);
-    let file = JSON.stringify(path_fetched[1].download_url);
-    let html_link = path_fetched[1].html_url;
- 
-
-
-        // hämtar bara ut ifall den har .manifest.json
-        let info = path_fetched.filter(file => file.name === '.manifest.json')[0];
-        // hämtar ut dens content och sedan decypta den så vi får ut information
-        let response = await fetch(info.url, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() }});
-        let json = await response.json();
-        let code = JSON.parse(atob(json.content.replace(/(\r\n|\n|\r)/gm, '')));
-        console.log(code)
-
-        console.log(code.filePath)
-        //  sedan tar den filepath så vi kan hämta den specilea JS coden som vi behöver
-
-        let code_path = await fetch(`${url}/repos/ntijoh/smallest_of_two/contents/${code.filePath}?ref=master`, { method: 'GET', headers: { 'Authorization': 'token ' + await getToken() }});
-        let code_json = await code_path.json();
-        console.log(code_json)
-
-        // hämta content av fillen och skriv in den i våran html
-    
-  
-  
-    console.log(file);
-    let filecardtemplate = document.querySelector("#fork");
-    if(forks == 0){
-        window.location.reload();
-        alert("Inga forks hittade.");
-    }else{
-        for (let i = 0; i < forks; i++) {
-            const fork_clone = filecardtemplate.content.cloneNode(true);
-            fork_clone.querySelector(".fork-title").textContent = "Api-test";
-            fork_clone.querySelector("code").textContent = file;
-            fork_clone.querySelector("a").href = html_link;
-            fork_clone.querySelector(".unit-tests").textContent= "40p";
-            main.appendChild(fork_clone);
-        }
-    }
-}
+document.querySelector('form#input').addEventListener('submit', api);
