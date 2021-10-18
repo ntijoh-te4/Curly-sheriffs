@@ -68,6 +68,8 @@ async function files(event) {
     window.location.reload();
     alert('Inga forks hittade.');
   } else {
+    console.log('tydligen får det inte bara vara ett if statement i en else, därför finns denna log.');
+ 
     // om det finns en .manifest.json fil i forken
     // eslint-disable-next-line no-lonely-if
     if (pathFetched.filter((file) => file.name === '.manifest.json')[0] === undefined) {
@@ -79,6 +81,7 @@ async function files(event) {
       const response = await fetch(info.url, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
       const json = await response.json();
       const code = JSON.parse(atob(json.content.replace(/(\r\n|\n|\r)/gm, '')));
+
 
       // hämar alla filer i en fork
       const pathID = await fetch(`${url}/repositories/${repoId}/forks`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
@@ -106,6 +109,7 @@ async function files(event) {
           });
         }
       }
+      hljs.highlightAll();
     }
   }
 }
@@ -162,6 +166,7 @@ function api(e) {
     reposToHtml(reposFetched);
   }
   repositories();
+  hljs.highlightAll();
 }
 // eventlistner på search
 document.querySelector('form#input').addEventListener('submit', api);
