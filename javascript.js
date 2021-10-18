@@ -26,22 +26,6 @@ async function reposcode(forkNames, code) {
   return contentCode;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // hämtar alla filer från rep
 
 // hämtar alla forks och coden till dom
@@ -69,7 +53,7 @@ async function files(event) {
     alert('Inga forks hittade.');
   } else {
     console.log('tydligen får det inte bara vara ett if statement i en else, därför finns denna log.');
- 
+
     // om det finns en .manifest.json fil i forken
     // eslint-disable-next-line no-lonely-if
     if (pathFetched.filter((file) => file.name === '.manifest.json')[0] === undefined) {
@@ -82,14 +66,13 @@ async function files(event) {
       const json = await response.json();
       const code = JSON.parse(atob(json.content.replace(/(\r\n|\n|\r)/gm, '')));
 
-
       // hämar alla filer i en fork
       const pathID = await fetch(`${url}/repositories/${repoId}/forks`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
       const reposFetched = await pathID.json();
 
       // for loop för varje fork som har kod
       // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < forks; i++) {
+      for (let i = 0; i < forks - 1; i++) {
         // fork namnen
         let forkNames = JSON.stringify(reposFetched[i].full_name);
         forkNames = forkNames.replaceAll('"', '');
@@ -106,31 +89,13 @@ async function files(event) {
             forkClone.querySelector('a').href = reposFetched[i].html_url;
             forkClone.querySelector('.unit-tests').textContent = '';
             main.appendChild(forkClone);
+            hljs.highlightAll();
           });
         }
       }
-      hljs.highlightAll();
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // skriver ut alla forks i html
 async function reposToHtml(reposFetched) {
@@ -166,7 +131,6 @@ function api(e) {
     reposToHtml(reposFetched);
   }
   repositories();
-  hljs.highlightAll();
 }
 // eventlistner på search
 document.querySelector('form#input').addEventListener('submit', api);
