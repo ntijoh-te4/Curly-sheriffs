@@ -130,6 +130,10 @@ function api(e) {
   async function repositories() {
     const repos = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
     const reposFetched = await repos.json();
+    if (reposFetched.message === null || reposFetched.message === undefined) {
+      window.location.reload();
+      alert('No user or organisation with this name exists, please try again ');
+    }
     console.log(reposFetched);
     reposToHtml(reposFetched);
   }
