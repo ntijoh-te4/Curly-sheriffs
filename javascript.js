@@ -31,69 +31,85 @@ async function reposcode(forkNames, code) {
   return contentCode;
 }
 
+// skriver ut all info och kod från githubs forksen i html
+async function forkCodeHtml(reposFetched, code, filecardtemplate, forks, main) {
+  for (let i = 0; i < forks - 1; i++) {
+    // fork namnen
+    let forkNames = JSON.stringify(reposFetched[i].full_name);
+    forkNames = forkNames.replaceAll('"', '');
+    // vi gillar inte william
+    if (forkNames === 'TE4-william-bruun/smallest_of_two') {
+      console.log('no js file');
+    } else {
+      // skriver ut allt i html
+      const fetchedCodes = reposcode(forkNames, code);
+      fetchedCodes.then((codeValue) => {
+        const forkClone = filecardtemplate.content.cloneNode(true);
+        forkClone.querySelector('.fork-title').textContent = forkNames;
+        forkClone.querySelector('code').textContent = codeValue;
+        forkClone.querySelector('a').href = reposFetched[i].html_url;
+        forkClone.querySelector('.unit-tests').textContent = '';
+        main.appendChild(forkClone);
+        hljs.highlightAll();
+      });
+    }
+  }
+}
+
+// kollar om det finns några forks i rep
+async function ifForksExist(forks) {
+  if (forks == 0) {
+    window.location.reload();
+    alert('Inga forks hittade.');
+  } else {
+    return true;
+  }
+  return forks;
+}
+
+// kollar om det finns en manifest.json fil
+async function IfJsonExist(pathFetched) {
+  if (pathFetched.filter((file) => file.name === '.manifest.json')[0] === undefined) {
+    window.location.reload();
+    alert('Inga hittade .manifest.json testa ett nytt repo');
+  } else {
+    return pathFetched;
+  }
+}
+
 // hämtar alla forks och coden till dom
 async function files(event) {
-  // html grunded
+  // html grunded för files
   const repoId = event.target.id;
   const { target } = event;
   const parent = target.parentElement;
   const forks = parent.querySelector('#forks').innerHTML;
   const main = document.querySelector('main');
   main.innerHTML = '';
-
-  // hämtar fork template
   const filecardtemplate = document.querySelector('#fork');
 
-  // hämtar alla filer i ett rep
+  // hämtar vilka filer som finns i rep
   const path = await fetch(`${url}/repositories/${repoId}/contents`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
   const pathFetched = await path.json();
 
   // om det inte finns några forks
-  if (forks == 0) {
-    window.location.reload();
-    alert('Inga forks hittade.');
-  } else {
-    console.log('tydligen får det inte bara vara ett if statement i en else, därför finns denna log.');
+  ifForksExist(forks);
 
-    // om det finns en .manifest.json fil i forken
-    if (pathFetched.filter((file) => file.name === '.manifest.json')[0] === undefined) {
-      window.location.reload();
-      alert('Inga hittade .manifest.json testa ett nytt repo');
-    } else {
-      // kollar vad som finns i json filen
-      const info = pathFetched.filter((file) => file.name === '.manifest.json')[0];
-      const response = await fetch(info.url, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
-      const json = await response.json();
-      const code = JSON.parse(atob(json.content.replace(/(\r\n|\n|\r)/gm, '')));
+  // om det finns en .manifest.json fil i forken
+  IfJsonExist(pathFetched);
 
-      // hämar alla filer i en fork
-      const pathID = await fetch(`${url}/repositories/${repoId}/forks`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
-      const reposFetched = await pathID.json();
+  // kollar vad som finns i json filen
+  const info = pathFetched.filter((file) => file.name === '.manifest.json')[0];
+  const response = await fetch(info.url, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
+  const json = await response.json();
+  const code = JSON.parse(atob(json.content.replace(/(\r\n|\n|\r)/gm, '')));
 
-      // for loop för varje fork som har kod
-      for (let i = 0; i < forks - 1; i++) {
-        // fork namnen
-        let forkNames = JSON.stringify(reposFetched[i].full_name);
-        forkNames = forkNames.replaceAll('"', '');
-        // vi gillar inte william
-        if (forkNames === 'TE4-william-bruun/smallest_of_two') {
-          console.log('no js file');
-        } else {
-          // skriver ut allt i html
-          const fetchedCodes = reposcode(forkNames, code);
-          fetchedCodes.then((value) => {
-            const forkClone = filecardtemplate.content.cloneNode(true);
-            forkClone.querySelector('.fork-title').textContent = forkNames;
-            forkClone.querySelector('code').textContent = value;
-            forkClone.querySelector('a').href = reposFetched[i].html_url;
-            forkClone.querySelector('.unit-tests').textContent = '';
-            main.appendChild(forkClone);
-            hljs.highlightAll();
-          });
-        }
-      }
-    }
-  }
+  // hämar alla filer i en fork
+  const pathID = await fetch(`${url}/repositories/${repoId}/forks`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
+  const reposFetched = await pathID.json();
+
+  // for loop för varje fork som har kod
+  forkCodeHtml(reposFetched, code, filecardtemplate, forks, main);
 }
 
 // skriver ut alla forks i html
@@ -129,10 +145,6 @@ function api(e) {
   async function repositories() {
     const repos = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
     const reposFetched = await repos.json();
-    if (reposFetched.message === null || reposFetched.message === undefined) {
-      window.location.reload();
-      alert('No user or organisation with this name exists, please try again ');
-    }
     reposToHtml(reposFetched);
   }
   repositories();
