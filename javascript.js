@@ -1,3 +1,8 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable eqeqeq */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable no-undef */
+/* eslint-disable no-loop-func */
 /* eslint-disable no-alert */
 /* eslint-disable no-console */
 
@@ -26,8 +31,6 @@ async function reposcode(forkNames, code) {
   return contentCode;
 }
 
-// hämtar alla filer från rep
-
 // hämtar alla forks och coden till dom
 async function files(event) {
   // html grunded
@@ -47,7 +50,6 @@ async function files(event) {
   console.log(pathFetched);
 
   // om det inte finns några forks
-  // eslint-disable-next-line eqeqeq
   if (forks == 0) {
     window.location.reload();
     alert('Inga forks hittade.');
@@ -55,7 +57,6 @@ async function files(event) {
     console.log('tydligen får det inte bara vara ett if statement i en else, därför finns denna log.');
 
     // om det finns en .manifest.json fil i forken
-    // eslint-disable-next-line no-lonely-if
     if (pathFetched.filter((file) => file.name === '.manifest.json')[0] === undefined) {
       window.location.reload();
       alert('Inga hittade .manifest.json testa ett nytt repo');
@@ -71,7 +72,6 @@ async function files(event) {
       const reposFetched = await pathID.json();
 
       // for loop för varje fork som har kod
-      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < forks - 1; i++) {
         // fork namnen
         let forkNames = JSON.stringify(reposFetched[i].full_name);
@@ -103,6 +103,7 @@ async function reposToHtml(reposFetched) {
   for (let i = 0; i < reposFetched.length; i++) {
     let repoName = JSON.stringify(reposFetched[i].name);
     repoName = repoName.replaceAll('"', '');
+    const link = reposFetched[i].html_url;
     const repoForks = JSON.stringify(reposFetched[i].forks);
     const id = JSON.stringify(reposFetched[i].id);
     const container = document.querySelector('.row');
@@ -110,6 +111,7 @@ async function reposToHtml(reposFetched) {
     const clone = tmpl.content.cloneNode(true);
     clone.querySelector('#showForks').addEventListener('click', files);
     clone.querySelector('#showForks').id = id;
+    clone.querySelector('a').href = link;
     const addName = document.createTextNode(repoName);
     const addForks = document.createTextNode(repoForks);
     clone.querySelector('#name').appendChild(addName);
@@ -128,6 +130,7 @@ function api(e) {
   async function repositories() {
     const repos = await fetch(`${url}/users/${searchInput}/repos`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
     const reposFetched = await repos.json();
+    console.log(reposFetched);
     reposToHtml(reposFetched);
   }
   repositories();
