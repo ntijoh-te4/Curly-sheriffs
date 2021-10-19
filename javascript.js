@@ -47,7 +47,6 @@ async function files(event) {
   // hämtar alla filer i ett rep
   const path = await fetch(`${url}/repositories/${repoId}/contents`, { method: 'GET', headers: { Authorization: `token ${await getToken()}` } });
   const pathFetched = await path.json();
-  console.log(pathFetched);
 
   // om det inte finns några forks
   if (forks == 0) {
@@ -134,7 +133,6 @@ function api(e) {
       window.location.reload();
       alert('No user or organisation with this name exists, please try again ');
     }
-    console.log(reposFetched);
     reposToHtml(reposFetched);
   }
   repositories();
